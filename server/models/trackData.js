@@ -2,11 +2,11 @@ const mongoose = require('mongoose')
 	Schema = mongoose.Schema;
 
 const trackDataSchema = new Schema({
-	partId: String,
-	techName: {type: Schema.Types.ObjectId, ref: 'technician'},
-	trackCode: String,
-	date: Date,
-	status: String
+	partId: {type: String, unique: true, required: true},
+	techName: {type: Schema.Types.ObjectId, ref: 'technician', required: true},
+	trackCode: {type: String, unique: true, required: true},
+	date: {type: Date, required: true},
+	status: {type: String, required: true}
 });
 
 const TrackData = mongoose.model('trackData', trackDataSchema)

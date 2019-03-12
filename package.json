@@ -14,6 +14,9 @@
     "express": "^4.16.4",
     "lodash": "^4.17.11",
     "mongoose": "^5.4.18",
-    "nodemon": "^1.18.10"
+    "nodemon": "^1.18.10",
+    "request": "^2.88.0",
+    "request-promise": "^4.2.4",
+    "xml2js": "^0.4.19"
   }
 }
