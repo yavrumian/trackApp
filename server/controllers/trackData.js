@@ -1,23 +1,22 @@
 const _ = require('lodash'),
-	request = require('request-promise'),
-	convert = require('xml-js').xml2json;
+	{validationResult } = require('express-validator/check');
+
 const {TrackData} = require('../models/trackData')
 
 exports.addTrack = async (req, res) => {
+	//Get errors from express-validator
+	const errors = validationResult(req);
+
 	try{
-		const url =`http://production.shippingapis.com/ShippingApi.dll?API=TrackV2&XML=%3CTrackFieldRequest%20USERID=%22${process.env.USPS_ID}%22%3E%3CTrackID%20ID=%22${req.body.trackCode}%22%3E%3C/TrackID%3E%3C/TrackFieldRequest%3E`
-		let xml = await request(url);
-		console.log(JSON.parse(convert(xml, {compact: true, spaces: 4})));
-		if(JSON.parse(convert(xml, {compact: true, spaces: 4})).Error)
-			throw {type: 'api-error', text: 'Invalid Credentials'}
-		if(JSON.parse(convert(xml, {compact: true, spaces: 4})).TrackResponse.TrackInfo.Error)
-			throw {type: 'api-error', text: 'Invalid Track Code'}
+		if(!errors.isEmpty()) //throw error if exists any
+			throw errors.array()
+		//pick values from body to avoid from unwished data
 		const body = _.pick(req.body, ['partId', 'techName', 'trackCode', 'date', 'status']);
+		//create new doc and save it
 		const track = new TrackData(body);
 		await track.save();
 		res.send(track)
 	}catch(e){
-		console.log(e.text);
 		res.status(400).send(e)
 	}
 }

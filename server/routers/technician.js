@@ -1,6 +1,9 @@
 const router = require('express').Router(),
-	controller = require('../controllers/technician')
+	{check} = require('express-validator/check');
 
-router.post('/add', controller.addTechnician)
+router.post('/add', check('name')
+					.isLength({min: 3})
+					.withMessage({type: 'tech-validation', text: 'Name must have at least 3 characters'}),
+ require('../controllers/technician').addTechnician)
 
 module.exports = router
