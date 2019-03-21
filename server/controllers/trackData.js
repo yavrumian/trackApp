@@ -11,7 +11,7 @@ exports.addTrack = async (req, res) => {
 		if(!errors.isEmpty()) //throw error if exists any
 			throw errors.array()
 		//pick values from body to avoid from unwished data
-		const body = _.pick(req.body, ['partId', 'techName', 'trackCode', 'date', 'status']);
+		const body = _.pick(req.body, ['partId', 'techName', 'trackCode', 'date', 'status', 'courier']);
 		//create new doc and save it
 		const track = new TrackData(body);
 		await track.save();
