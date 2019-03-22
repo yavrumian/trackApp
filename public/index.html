@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+    <div class="container top_block">
+        <div class="row">
+            <div class="col-sm-10 offset-sm-1">
+                <div class="row">
+                    <div class="col-sm-7">
+                        <form class="form_block">
+                            <div class="row">
+                                <div class="col left">
+                                    <button type="button" class="btn arrow-down" data-toggle="modal" data-target="#myModal">
+                                        <img src="img/arrow-down.png" alt="">
+                                    </button>
+                                    <input type="text" class="form-control " id="trackCode" placeholder="Enter track code">
+                                </div>
+                                <div class="col right">
+                                    <input type="text" class="form-control " id="partId" placeholder="Enter identification of part">
+                                </div>
+						   <input type="submit" style="display: none">
+                            </div>
+                        </form>
+				    <span class="add-err-msg" style="color: red"></span>
+                    </div>
+                    <div class="col-sm-5">
+                        <form class="search_form">
+                            <div class="row">
+                                <div class="col">
+                                    <button type="button" class="btn magnif" data-toggle="modal">
+                                        <img src="img/magnif.png" alt="">
+                                    </button>
+                                    <input type="text" class="form-control search" placeholder="Enter part's ID for search">
+                                </div>
+                            </div>
+					   <input type="submit" style="display: none">
+                        </form>
+				    <span class="search-err-msg" style="color: red"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+        <!-- The Modal -->
+        <div class="modal" id="myModal">
+            <div class="modal-dialog modal-dialog-scrollable">
+                <div class="modal-content">
+
+                    <!-- Modal Header -->
+                    <div class="modal-header">
+                        <form class="form_block">
+                            <div class="row">
+                                <div class="col-sm-12 left">
+                                    <button type="button" class="btn arrow-down" data-toggle="modal" data-target="#myModal">
+                                        <img src="img/arrow-down.png" alt="">
+                                    </button>
+                                    <input type="text" class="form-control " placeholder="Enter new technician">
+
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+
+                    <!-- Modal body -->
+                    <div class="modal-body">
+					<script id="technician-tem" type="text/template">
+						<div class="row name">
+							<div class="col-sm-12 ">
+								<h4>{{name}}</h4>
+							</div>
+						</div>
+					</script>
+
+                    <!-- Modal footer -->
+                    <div class="modal-footer">
+                        <button type="button" class="continue">Continue</button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+	   <!-- <div class="data">
+
+		   <div class="row">
+			   <div class="col-1 offset-sm-1 refresh">
+				   <a href="#"><img src="img/refresh.png" alt="" id="refresh"></a>
+			   </div>
+		   </div>
+
+		   <div class="row">
+			   <div class="col-sm-10 offset-sm-1 group_1">
+				   <div class="row name">
+					   <div class="col-sm-12 ">
+						   <h4>Nicolas</h4>
+					   </div>
+				   </div>
+				   <div class="row sm_part">
+					   <div class="col-sm-5 ">
+						   <p>some part</p>
+						   <p>Delivered Monday 12/03/2018 at 10:00 am</p>
+						   <span>9261203451946407552011</span>
+					   </div>
+					   <div class="col-sm-7 complate blue">
+						   <p>complate!</p>
+						   <p>12/03/2018</p>
+					   </div>
+				   </div>
+			   </div>
+		   </div>
+	   </div> -->
+    </div>
+
+
+
+
+
+
+<script src="https://code.jquery.com/jquery-3.3.1.min.js" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"  crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"  crossorigin="anonymous"></script>
+<script src="./js/script.js" charset="utf-8"></script>
+<script src="./js/libs/mustache-min.js" charset="utf-8"></script>
+</body>
+</html>

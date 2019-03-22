@@ -10,7 +10,7 @@ const app = express(),
 
 app.set('view engine', 'hbs');
 app.use(express.static(publicPath))
-app.use(bodyParser.json());
+app.use(bodyParser.urlencoded());
 app.use('/technician', require('./routers/technician'));
 app.use('/trackData', require('./routers/trackData'));
 
@@ -19,11 +19,10 @@ app.get('/all', require('./controllers/all').getAll)
 
 
 
-app.get('/test', async (req, res) => {
-	const urlFedEx = `https://www.fedex.com/trackingCal/track?data={%22TrackPackagesRequest%22:{%22trackingInfoList%22:[{%22trackNumberInfo%22:{%22trackingNumber%22:%22fuck%22}}]}}&action=trackpackages`
-	const fedEx = await request(urlFedEx)
-	console.log(JSON.parse(fedEx).TrackPackagesResponse.packageList[0].trackingQualifier);
-	res.send(fedEx)
+app.post('/test', async (req, res) => {
+
+	console.log(req.body);
+	res.send('fedEx')
 
 })
 app.get('/html', (req, res) => {
