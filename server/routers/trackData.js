@@ -2,6 +2,8 @@ const router = require('express').Router(),
 	convert = require('xml-js').xml2json,
 	request = require('request-promise'),
 	{check} = require('express-validator/check');
+
+const {Technician} = require('../models/technician')
 let statusCode;
 router.post('/add',[
 	//add validations
@@ -9,12 +11,20 @@ router.post('/add',[
 		.isLength({min:3})
 		.trim()
     		.escape()
-		.withMessage({type: 'track-data-validation', text: 'Part ID must have at least 3 characters'}),
+		.withMessage({type: 'track-data-validation', msg: 'Part ID must have at least 3 characters'}),
 	check('techName')
-		.isLength({min:3})
 		.trim()
     		.escape()
-		.withMessage({type: 'track-data-validation', text: 'Tech name must have at least 3 characters'}),
+		.custom(async value => {
+			try{
+				const tech = await Technician.findOne({_id: value})
+				if(!tech) {
+					throw {type: 'validation-error', msg: 'Invalid technician name'}
+				}
+			}catch(e){
+				throw e
+			}
+		}),
 	check('trackCode')
 		.trim()
     		.escape()
@@ -35,7 +45,7 @@ router.post('/add',[
 				statusCode = -1
 			}
 			if(statusCode == -1)
-				throw {type: 'api-error', text:'Invalid Tracking Code'}
+				throw {type: 'api-error', msg:'Invalid Tracking Code'}
 		})
 
 ], require('../controllers/trackData').addTrack)

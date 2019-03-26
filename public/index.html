@@ -14,18 +14,18 @@
             <div class="col-sm-10 offset-sm-1">
                 <div class="row">
                     <div class="col-sm-7">
-                        <form class="form_block">
+                        <form class="form_block addTrack-form">
                             <div class="row">
                                 <div class="col left">
-                                    <button type="button" class="btn arrow-down" data-toggle="modal" data-target="#myModal">
+                                    <button type="button" class="btn arrow-down openModal" >
                                         <img src="img/arrow-down.png" alt="">
                                     </button>
-                                    <input type="text" class="form-control " id="trackCode" placeholder="Enter track code">
+                                    <input type="text" class="form-control addForm" id="partId" placeholder="Enter Part ID">
                                 </div>
                                 <div class="col right">
-                                    <input type="text" class="form-control " id="partId" placeholder="Enter identification of part">
+                                    <input type="text" class="form-control addForm" id="trackCode" placeholder="Enter Tracking Code">
                                 </div>
-						   <input type="submit" style="display: none">
+
                             </div>
                         </form>
 				    <span class="add-err-msg" style="color: red"></span>
@@ -51,34 +51,48 @@
 
 
         <!-- The Modal -->
+	   <div class="modal" id="loader">
+	   	<div class="modal-dialog">
+			<div class="modal-content">
+				<img src="./img/loader.gif" alt="">
+			</div>
+	   	</div>
+	   </div>
         <div class="modal" id="myModal">
             <div class="modal-dialog modal-dialog-scrollable">
                 <div class="modal-content">
 
                     <!-- Modal Header -->
                     <div class="modal-header">
-                        <form class="form_block">
+                        <form class="form_block addTech">
                             <div class="row">
                                 <div class="col-sm-12 left">
-                                    <button type="button" class="btn arrow-down" data-toggle="modal" data-target="#myModal">
+                                    <button type="button" class="btn arrow-down addTechBtn">
                                         <img src="img/arrow-down.png" alt="">
                                     </button>
-                                    <input type="text" class="form-control " placeholder="Enter new technician">
-
+                                    <input type="text" class="form-control techName" placeholder="Enter new technician">
+							 <span id="addTechErr" style="color: red"></span>
                                 </div>
                             </div>
                         </form>
                     </div>
 
                     <!-- Modal body -->
-                    <div class="modal-body">
-					<script id="technician-tem" type="text/template">
-						<div class="row name">
-							<div class="col-sm-12 ">
-								<h4>{{name}}</h4>
+                    <div class="modal-body" id="technician">
+					<script id="technician-template" type="text/template">
+						{{#names}}
+							<div class="row name">
+								<div class="col-sm-12 ">
+									<h4>• {{name}}</h4>
+									<span class="techId" style="display: none">{{_id}}</span>
+								</div>
 							</div>
-						</div>
+						{{/names}}
+						<span>{{msg}}</span>
 					</script>
+					<div class="items">
+
+					</div>
 
                     <!-- Modal footer -->
                     <div class="modal-footer">
@@ -88,46 +102,51 @@
                 </div>
             </div>
         </div>
-	   <!-- <div class="data">
 
-		   <div class="row">
-			   <div class="col-1 offset-sm-1 refresh">
-				   <a href="#"><img src="img/refresh.png" alt="" id="refresh"></a>
-			   </div>
-		   </div>
-
-		   <div class="row">
-			   <div class="col-sm-10 offset-sm-1 group_1">
-				   <div class="row name">
-					   <div class="col-sm-12 ">
-						   <h4>Nicolas</h4>
-					   </div>
-				   </div>
-				   <div class="row sm_part">
-					   <div class="col-sm-5 ">
-						   <p>some part</p>
-						   <p>Delivered Monday 12/03/2018 at 10:00 am</p>
-						   <span>9261203451946407552011</span>
-					   </div>
-					   <div class="col-sm-7 complate blue">
-						   <p>complate!</p>
-						   <p>12/03/2018</p>
-					   </div>
-				   </div>
-			   </div>
-		   </div>
-	   </div> -->
     </div>
+    <!-- <div class="data">
+
+	    <div class="row">
+		    <div class="col-1 offset-sm-1 refresh">
+			    <a href="#"><img src="img/refresh.png" alt="" id="refresh"></a>
+		    </div>
+	    </div>
+
+	    <div class="row">
+		    <div class="col-sm-10 offset-sm-1 group_1">
+			    <div class="row name">
+				    <div class="col-sm-12 ">
+					    <h4>Nicolas</h4>
+				    </div>
+			    </div>
+			    <div class="row sm_part">
+				    <div class="col-sm-5 ">
+					    <p>some part</p>
+					    <p>Delivered Monday 12/03/2018 at 10:00 am</p>
+					    <span>9261203451946407552011</span>
+				    </div>
+				    <div class="col-sm-7 complate blue">
+					    <p>complate!</p>
+					    <p>12/03/2018</p>
+				    </div>
+			    </div>
+		    </div>
+	    </div>
+    </div> -->
+    <div class="addData-res" style="display: none">
+    		<h1 id="addData-header">There was an error, please fix and try again</h1>
+		<pre id="addData-msg"></pre>
+    </div>
+</div>
 
 
 
 
 
-
-<script src="https://code.jquery.com/jquery-3.3.1.min.js" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"  crossorigin="anonymous"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"  crossorigin="anonymous"></script>
-<script src="./js/script.js" charset="utf-8"></script>
-<script src="./js/libs/mustache-min.js" charset="utf-8"></script>
+	<script src="https://code.jquery.com/jquery-3.3.1.min.js" crossorigin="anonymous"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"  crossorigin="anonymous"></script>
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"  crossorigin="anonymous"></script>
+	<script src="./js/script.js" charset="utf-8"></script>
+	<script src="./js/libs/mustache-min.js" charset="utf-8"></script>
 </body>
 </html>

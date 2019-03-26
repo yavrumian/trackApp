@@ -7,7 +7,7 @@ exports.search = async (req, res) => {
 		//Find doc with given data, throw error if there's no doc
 		const data = await TrackData.findOne({partId: req.query.partId}).populate('techName')
 		if(!data)
-			throw {type: 'search-db', text: "Invalid part ID"}
+			throw {type: 'search-db', msg: "Invalid part ID"}
 		if(data.courier == "USPS"){
 			const urlUSPS =`http://production.shippingapis.com/ShippingApi.dll?API=TrackV2&XML=%3CTrackFieldRequest%20USERID=%22${process.env.USPS_ID}%22%3E%3CTrackID%20ID=%22${data.trackCode}%22%3E%3C/TrackID%3E%3C/TrackFieldRequest%3E`
 			//Make request to USPS with given data and parse it

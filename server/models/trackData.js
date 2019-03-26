@@ -5,7 +5,6 @@ const trackDataSchema = new Schema({
 	partId: {type: String, unique: true, required: true},
 	techName: {type: Schema.Types.ObjectId, ref: 'Technician', required: true},
 	trackCode: {type: String, unique: true, required: true},
-	date: {type: Date, required: true},
 	courier: {type: String, required: true}
 });
 
