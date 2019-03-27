@@ -41,6 +41,6 @@ exports.search = async (req, res) => {
 	}catch(e){
 		console.log('error');
 		console.log(e);
-		res.send(e)
+		res.status(404).send(e)
 	}
 }

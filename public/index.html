@@ -34,13 +34,13 @@
                         <form class="search_form">
                             <div class="row">
                                 <div class="col">
-                                    <button type="button" class="btn magnif" data-toggle="modal">
+                                    <button class="btn magnif" data-toggle="modal" type="submit">
                                         <img src="img/magnif.png" alt="">
                                     </button>
                                     <input type="text" class="form-control search" placeholder="Enter part's ID for search">
                                 </div>
                             </div>
-					   <input type="submit" style="display: none">
+					   <!-- <input type="submit" style="display: none"> -->
                         </form>
 				    <span class="search-err-msg" style="color: red"></span>
                     </div>
@@ -104,36 +104,38 @@
         </div>
 
     </div>
-    <!-- <div class="data">
+	    <div class="data">
+		    <script type="text/template" id="result-template">
 
-	    <div class="row">
-		    <div class="col-1 offset-sm-1 refresh">
-			    <a href="#"><img src="img/refresh.png" alt="" id="refresh"></a>
-		    </div>
-	    </div>
-
-	    <div class="row">
-		    <div class="col-sm-10 offset-sm-1 group_1">
-			    <div class="row name">
-				    <div class="col-sm-12 ">
-					    <h4>Nicolas</h4>
-				    </div>
-			    </div>
-			    <div class="row sm_part">
-				    <div class="col-sm-5 ">
-					    <p>some part</p>
-					    <p>Delivered Monday 12/03/2018 at 10:00 am</p>
-					    <span>9261203451946407552011</span>
-				    </div>
-				    <div class="col-sm-7 complate blue">
-					    <p>complate!</p>
-					    <p>12/03/2018</p>
-				    </div>
+		    <div class="row">
+			    <div class="col-1 offset-sm-1 refresh">
+				    <a href="#"><img src="img/refresh.png" alt="" id="refresh"></a>
 			    </div>
 		    </div>
-	    </div>
-    </div> -->
-    <div class="addData-res" style="display: none">
+
+		    <div class="row">
+			    <div class="col-sm-10 offset-sm-1 group_1">
+				    <div class="row name">
+					    <div class="col-sm-12 ">
+						    <h4>{{techName}}</h4>
+					    </div>
+				    </div>
+				    <div class="row sm_part">
+					    <div class="col-sm-5 ">
+						    <p>{{partId}}</p>
+						    <p>Delivered Monday 12/03/2018 at 10:00 am</p>
+						    <span>{{trackCode}}</span>
+					    </div>
+					    <div class="col-sm-7 complate blue">
+						    <p>complate!</p>
+						    <p>12/03/2018</p>
+					    </div>
+				    </div>
+			    </div>
+		    </div>
+	    </script>
+	</div>
+    <div class="addData-res error_danger" style="display: none">
     		<h1 id="addData-header">There was an error, please fix and try again</h1>
 		<pre id="addData-msg"></pre>
     </div>

@@ -26,12 +26,12 @@ app.post('/test', async (req, res) => {
 	res.send('fedEx')
 
 })
-app.get('/html', (req, res) => {
-	res.render('index.hbs')
-})
+// app.get('/html', (req, res) => {
+// 	res.render('index.hbs')
+// })
 
 app.use(function(req, res, next) {
-  return res.status(404).send({ message: 'Route'+req.url+' Not found.' });
+  return res.status(404).render('404.hbs', {url: req.url});
 });
 
 app.listen(port, () => {

@@ -2,7 +2,6 @@ let techId;
 let template
 function addProceed(e){
 	e.preventDefault();
-	// if($('.add_form')[0].val() )
 	if($('#trackCode').val().length < 3 || $('#partId').val().length < 3)
 	$('.add-err-msg').text('*Inputs must have at least 3 character')
 	else{
@@ -81,7 +80,6 @@ $('.addTrack-form').submit(function(e){
 			$('#addData-header').text('There was an error, please fix and TRY AGAIN')
 			$('#addData-msg').text(err.responseJSON.msg)
 			$('.addData-res').show()
-			console.log(err.responseJSON);
 		}
 		})
 	}
@@ -112,8 +110,9 @@ $('.addTech').submit(function(e){
 		},
 		error: function(err){
 			$('#loader').modal('hide')
-			console.log(err);
-			$('#addTechErr').text(err.responseJSON.msg)
+			$('#addData-header').text('There was an error, please fix and TRY AGAIN')
+			$('#addData-msg').text(err.responseJSON.msg)
+			$('.addData-res').show()
 		}
 		})
 	}
@@ -155,10 +154,31 @@ $('.arrow-down').click(function(e){
 // })
 $('.search_form').submit(function(e){
 	e.preventDefault();
-	// if($('.add_form')[0].val() )
-	if(!$('.search').val())
+
+	if($('.search').val() < 3)
 		$('.search-err-msg').text('*Part ID Can\'t be empty')
 	else{
-
+		$('.search-err-msg').text('')
+		$('#loader').modal()
+		$.ajax({url: '/search?partId=' + $('.search').val(),
+		method: 'get',
+		success: function(res){
+			template = $('#result-template').html();
+			$('#loader').modal('hide')
+			var html = Mustache.render(template, {
+				techName: res.techName.name,
+				partId: res.partId,
+				trackCode: res.trackCode
+			});
+			$('.data').prepend(html)
+			console.log(res);
+		},
+		error: function(err){
+			$('#loader').modal('hide')
+			$('#addData-header').text('There was an error, please fix and TRY AGAIN')
+			$('#addData-msg').text(err.responseJSON.msg)
+			$('.addData-res').show()
+		}
+		})
 	}
 })
