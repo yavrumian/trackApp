@@ -10,6 +10,21 @@ function addProceed(e){
 	}
 }
 
+function pageReset(res){
+	$('.data').hide();
+	$('#msg_alert').hide()
+	if(res){
+
+		if(res == 'error'){
+			$('#msg_alert').removeClass('alert-success')
+			$('#msg_alert').addClass('alert-danger')
+		}else if(res == 'success'){
+			$('#msg_alert').removeClass('alert-danger')
+			$('#msg_alert').addClass('alert-success')
+		}
+	}
+}
+
 function addTechSuccess(res, template){
 		if(!res[0]){
 			var html = Mustache.render(template, {
@@ -23,8 +38,8 @@ function addTechSuccess(res, template){
 		$('.items').html(html)
 		$('.name').click(function(e){
 			e.preventDefault()
-			$('.blue').removeClass('blue')
-			$(this).addClass('blue')
+			$('.selected').removeClass('selected')
+			$(this).addClass('selected')
 			techId = $('span', this).text()
 		})
 }
@@ -36,10 +51,12 @@ $(document).ready(function(){
 	$.ajax({url: '/allTech',
 	method: 'get',
 	success: function(res){
+		pageReset()
 		$('#loader').modal('hide')
 		addTechSuccess(res, template)
 	},
 	error: function(e){
+		pageReset()
 		$('#loader').modal('hide')
 		var html = Mustache.render(template, {
 			msg: 'There was an error. Please check you connection',
@@ -68,18 +85,26 @@ $('.addTrack-form').submit(function(e){
 			trackCode: $('#trackCode').val()
 		},
 		success: function(res){
+			pageReset('success')
 			$('#loader').modal('hide')
-
+			//SUCCESS CASE ********************************************
+			// $( "#msg_alert" ).addClass( "alert-success" );
+			// $( "#msg_alert" ).removeClass( "alert-danger" );
+			console.log("vvvvvvvvvvvvvvvvvvvvv");
 			$('#addData-msg').text(`Part ID: ${res.partId}\nTracking Code: ${res.trackCode}`)
 			$('#addData-header').text('Track Data was added successfuly ')
 			$('.addData-res').show()
 			console.log(res);
 		},
 		error: function(err){
+			pageReset('error')
+			//ERROR CASE ********************************************
 			$('#loader').modal('hide')
+			// $( "#msg_alert" ).addClass( "alert-danger" );
 			$('#addData-header').text('There was an error, please fix and TRY AGAIN')
 			$('#addData-msg').text(err.responseJSON.msg)
 			$('.addData-res').show()
+
 		}
 		})
 	}
@@ -105,11 +130,15 @@ $('.addTech').submit(function(e){
 			name: techName
 		},
 		success: function(res){
+			pageReset()
 			$('#loader').modal('hide')
 			addTechSuccess(res, template)
 		},
 		error: function(err){
+			pageReset('error')
+			//ERROR CASE ********************************************
 			$('#loader').modal('hide')
+			// $( "#msg_alert" ).addClass( "alert-danger" );
 			$('#addData-header').text('There was an error, please fix and TRY AGAIN')
 			$('#addData-msg').text(err.responseJSON.msg)
 			$('.addData-res').show()
@@ -163,18 +192,49 @@ $('.search_form').submit(function(e){
 		$.ajax({url: '/search?partId=' + $('.search').val(),
 		method: 'get',
 		success: function(res){
+			let status, expected, expectedDate;
+			pageReset()
+			$('.data').show()
 			template = $('#result-template').html();
 			$('#loader').modal('hide')
+			//*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/
+			if(res.expected){
+				let color, percent = Math.round((moment.duration(moment(res.expected).diff(moment())).asMinutes() / moment.duration(moment(res.expected).diff(moment(res.startDate))).asMinutes()) * 100)
+				$("head").append('<style type="text/css"></style>');
+				if(percent >= 50)
+					color = '#ff9b5d'
+				else color = '#ff485c'
+				$("head").children(':last').html('.blue{background: linear-gradient(to right, ' + color + ' ' + percent +'%, #F6F6F6 2%)}');
+				expected = 'Expected in ' + moment.duration(moment(res.expected).diff(moment())).humanize()
+				expectedDate = moment(res.expected).format('L')
+				status = moment(res.startDate).format('[Shaped on ]dddd L [at] LT')
+			}else{
+				 $("head").append('<style type="text/css"></style>');
+				 $("head").children(':last').html('.blue{background: linear-gradient(to right, #00C5B0 100%, #F6F6F6 2%)}');
+				console.log($('.blue'));
+				expected = 'Complete!';
+				expectedDate = moment(res.lastDate).format('L')
+				status = moment(res.lastDate).format('[Delivered on ]dddd L [at] LT')
+				console.log('Delivered');
+			}
+
 			var html = Mustache.render(template, {
 				techName: res.techName.name,
 				partId: res.partId,
-				trackCode: res.trackCode
+				trackCode: res.trackCode,
+				status: status,
+				expected: expected,
+				expectedDate: expectedDate
 			});
+			$('#data-item').remove()
 			$('.data').prepend(html)
 			console.log(res);
 		},
 		error: function(err){
+			pageReset('error')
+			//ERROR CASE ********************************************
 			$('#loader').modal('hide')
+			// $( "#msg_alert" ).addClass( "alert-danger" );
 			$('#addData-header').text('There was an error, please fix and TRY AGAIN')
 			$('#addData-msg').text(err.responseJSON.msg)
 			$('.addData-res').show()

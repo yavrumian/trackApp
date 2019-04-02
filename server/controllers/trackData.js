@@ -1,7 +1,8 @@
 const _ = require('lodash'),
 	{validationResult } = require('express-validator/check');
 
-const {TrackData} = require('../models/trackData')
+const {TrackData} = require('../models/trackData'),
+	{Technician} = require('../models/technician')
 
 exports.addTrack = async (req, res) => {
 	//Get errors from express-validator
@@ -14,6 +15,8 @@ exports.addTrack = async (req, res) => {
 		const body = _.pick(req.body, ['partId', 'techName', 'trackCode', 'courier']);
 		//create new doc and save it
 		const track = new TrackData(body);
+		const tech = await Technician.findOneAndUpdate({_id: body.techName}, {$push:{datas: track._id}}, {new:true});
+		if(!tech) console.log('vd es');
 		await track.save();
 		res.send(track)
 	}catch(e){

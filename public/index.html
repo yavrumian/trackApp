@@ -3,12 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
-          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="../libs/bootstrap.min.css" crossorigin="anonymous">
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-
     <div class="container top_block">
         <div class="row">
             <div class="col-sm-10 offset-sm-1">
@@ -107,13 +105,13 @@
 	    <div class="data">
 		    <script type="text/template" id="result-template">
 
-		    <div class="row">
-			    <div class="col-1 offset-sm-1 refresh">
+		    <!-- <div class="row">
+			    <div class="col-1 offset-sm-1 esh">
 				    <a href="#"><img src="img/refresh.png" alt="" id="refresh"></a>
 			    </div>
-		    </div>
+		    </div> -->
 
-		    <div class="row">
+		    <div class="row" id="data-item">
 			    <div class="col-sm-10 offset-sm-1 group_1">
 				    <div class="row name">
 					    <div class="col-sm-12 ">
@@ -123,32 +121,35 @@
 				    <div class="row sm_part">
 					    <div class="col-sm-5 ">
 						    <p>{{partId}}</p>
-						    <p>Delivered Monday 12/03/2018 at 10:00 am</p>
+						    <p>{{status}}</p>
 						    <span>{{trackCode}}</span>
 					    </div>
 					    <div class="col-sm-7 complate blue">
-						    <p>complate!</p>
-						    <p>12/03/2018</p>
+						    <p>{{expected}}</p>
+						    <p>{{expectedDate}}</p>
 					    </div>
 				    </div>
 			    </div>
 		    </div>
 	    </script>
 	</div>
-    <div class="addData-res error_danger" style="display: none">
-    		<h1 id="addData-header">There was an error, please fix and try again</h1>
-		<pre id="addData-msg"></pre>
-    </div>
+	<div class="row">
+		<div id="msg_alert" class="col-sm-10 offset-sm-1 addData-res  alert  error_danger" style="display: none">
+	     		<h1 id="addData-header">There was an error, please fix and try again</h1>
+	 		<pre id="addData-msg"></pre>
+	     </div>
+	</div>
+
 </div>
 
 
 
 
-
-	<script src="https://code.jquery.com/jquery-3.3.1.min.js" crossorigin="anonymous"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"  crossorigin="anonymous"></script>
-	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"  crossorigin="anonymous"></script>
+	<script src="./libs/moment.min.js" charset="utf-8"></script>
+	<script src="./libs/jquery.min.js" crossorigin="anonymous"></script>
+	<script src="./libs/popper.min.js"  crossorigin="anonymous"></script>
+	<script src="./libs/bootstrap.min.js"  crossorigin="anonymous"></script>
 	<script src="./js/script.js" charset="utf-8"></script>
-	<script src="./js/libs/mustache-min.js" charset="utf-8"></script>
+	<script src="./libs/mustache-min.js" charset="utf-8"></script>
 </body>
 </html>

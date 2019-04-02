@@ -15,13 +15,12 @@ exports.search = async (req, res) => {
 			let parsedXML = JSON.parse(convert(usps, {compact: true, spaces: 4})).TrackResponse.TrackInfo;
 			//Get first and last events of given trackCode, assign a object and send it to Client
 			let startEvent = parsedXML.TrackDetail.pop();
-			let lastEvent = parsedXML.TrackDetail[0]
-			console.log('usspss');
+			let lastEvent = parsedXML.TrackSummary.EventDate._text + " " +parsedXML.TrackSummary.EventTime._text;
+			console.log(parsedXML.TrackSummary.EventDate._text + " " +parsedXML.TrackSummary.EventTime._text);
 			body = {
 				...data._doc,
 				startDate: startEvent.EventDate._text + " " + startEvent.EventTime._text,
-				lastDate: lastEvent.EventDate._text + " " + lastEvent.EventTime._text,
-				eventText: lastEvent.Event._text
+				lastDate: lastEvent
 			}
 		}
 		if(data.courier == 'fedEx'){
@@ -33,7 +32,6 @@ exports.search = async (req, res) => {
 				...data._doc,
 				startDate: JSON.parse(fedEx).TrackPackagesResponse.packageList[0].shipDt,
 				lastDate: JSON.parse(fedEx).TrackPackagesResponse.packageList[0].scanEventList[0].date + " " + JSON.parse(fedEx).TrackPackagesResponse.packageList[0].scanEventList[0].time,
-				eventText: JSON.parse(fedEx).TrackPackagesResponse.packageList[0].mainStatus,
 				expected: JSON.parse(fedEx).TrackPackagesResponse.packageList[0].estDeliveryDt
 			}
 		}
