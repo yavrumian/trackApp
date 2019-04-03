@@ -16,7 +16,6 @@ exports.search = async (req, res) => {
 			//Get first and last events of given trackCode, assign a object and send it to Client
 			let startEvent = parsedXML.TrackDetail.pop();
 			let lastEvent = parsedXML.TrackSummary.EventDate._text + " " +parsedXML.TrackSummary.EventTime._text;
-			console.log(parsedXML.TrackSummary.EventDate._text + " " +parsedXML.TrackSummary.EventTime._text);
 			body = {
 				...data._doc,
 				startDate: startEvent.EventDate._text + " " + startEvent.EventTime._text,
@@ -26,8 +25,6 @@ exports.search = async (req, res) => {
 		if(data.courier == 'fedEx'){
 			const urlFedEx = `https://www.fedex.com/trackingCal/track?data={%22TrackPackagesRequest%22:{%22trackingInfoList%22:[{%22trackNumberInfo%22:{%22trackingNumber%22:%22${data.trackCode}%22}}]}}&action=trackpackages`
 			let fedEx = await request(urlFedEx)
-			console.log('hey');
-			console.log(JSON.parse(fedEx).TrackPackagesResponse.packageList[0]);
 			body = {
 				...data._doc,
 				startDate: JSON.parse(fedEx).TrackPackagesResponse.packageList[0].shipDt,
@@ -35,7 +32,7 @@ exports.search = async (req, res) => {
 				expected: JSON.parse(fedEx).TrackPackagesResponse.packageList[0].estDeliveryDt
 			}
 		}
-		res.send(body)
+		res.send([body])
 	}catch(e){
 		console.log('error');
 		console.log(e);

@@ -10,6 +10,73 @@ function addProceed(e){
 	}
 }
 
+Handlebars.registerHelper("status", function(data) {
+	// console.log(res);
+	if(data.expected){
+		return moment(data.startDate).format('[Shaped on ]dddd L [at] LT')
+	}else{
+		return moment(data.lastDate).format('[Delivered on ]dddd L [at] LT')
+	}
+})
+
+Handlebars.registerHelper("expected", function(data) {
+	// console.log(res);
+	if(data.expected){
+		return 'Expected in ' + moment.duration(moment(data.expected).diff(moment())).humanize()
+	}else{
+		return 'Complete!'
+	}
+})
+
+Handlebars.registerHelper("expectedDate", function(data) {
+	// console.log(res);
+	if(data.expected){
+		return  moment(data.expected).format('L')
+	}else{
+		return moment(data.lastDate).format('L')
+	}
+})
+
+Handlebars.registerHelper("config", function(data) {
+	$("head").append('<style type="text/css"></style>');
+	if(data.expected){
+		let color, percent = Math.round((moment.duration(moment().diff(moment(data.startDate))).asMinutes() / moment.duration(moment(data.expected).diff(moment(data.startDate))).asMinutes()) * 80) +10
+		if(percent >= 50) color = '#ff9b5d'
+		else color = '#ff485c'
+		$("head").children(':last').html('#' + data.partId + '{background: linear-gradient(to right, ' + color + ' ' + percent +'%, #F6F6F6 2%)}');
+	}else{
+		 $("head").children(':last').html('#' + data.partId +'{background: linear-gradient(to right, #00C5B0 100%, #F6F6F6 2%)}');
+		// $('#' + data.partId).css('background', '')
+
+		console.log($('#test'));
+		console.log('Delivered');
+	}
+})
+
+function pageInit(res){
+	pageReset()
+	$('.data').show()
+	template = $('#result-template').html();
+	$('#loader').modal('hide')
+	//*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/
+	console.log(res);
+
+
+	var html = Handlebars.compile(template)( {
+		// techName: res.techName.name,
+		// partId: res.partId,
+		// trackCode: res.trackCode,
+		// status: status,
+		// expected: expected,
+		// expectedDate: expectedDate
+		res:res
+	});
+	$('#data-item').remove()
+	console.log('whyy');
+	$('.data').prepend(html)
+	console.log(res);
+}
+
 function pageReset(res){
 	$('.data').hide();
 	$('#msg_alert').hide()
@@ -27,16 +94,16 @@ function pageReset(res){
 
 function addTechSuccess(res, template){
 		if(!res[0]){
-			var html = Mustache.render(template, {
+			var html = Handlebars.compile(template)({
 				msg: 'There\'s no Technicians, Add to proceed'
 			});
 		}else {
-			var html = Mustache.render(template, {
+			var html = Handlebars.compile(template)({
 				names: res
 			});
 		}
 		$('.items').html(html)
-		$('.name').click(function(e){
+		$('.name-blue').click(function(e){
 			e.preventDefault()
 			$('.selected').removeClass('selected')
 			$(this).addClass('selected')
@@ -45,12 +112,14 @@ function addTechSuccess(res, template){
 }
 
 $(document).ready(function(){
+	$('.data').show()
 	$('input').val('')
 	template = $('#technician-template').html();
 	$('#loader').modal()
 	$.ajax({url: '/allTech',
 	method: 'get',
 	success: function(res){
+		pageInit(res)
 		pageReset()
 		$('#loader').modal('hide')
 		addTechSuccess(res, template)
@@ -153,18 +222,6 @@ $('.addForm').keypress(function(e){
 	}
 })
 
-$('#refresh').click(function(e){
-    deg += 180;
-    console.log('ok');
-    e.preventDefault()
-    $(this).css({
-        '-webkit-transform' : 'rotate(' + deg + 'deg)',
-        '-moz-transform' : 'rotate(' + deg + 'deg)',
-        '-ms-transform' : 'rotate(' + deg + 'deg)',
-        '-o-transform' : 'rotate(' + deg + 'deg)',
-        'transform' : 'rotate(' + deg + 'deg)'
-    })
-})
 
 $('.arrow-down').click(function(e){
 	addProceed(e)

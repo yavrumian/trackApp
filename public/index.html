@@ -48,13 +48,14 @@
 
 
 
-        <!-- The Modal -->
+        <!-- The Modal **********************LOADER************************** -->
 	   <div class="modal" id="loader">
-	   	<div class="modal-dialog">
+	   	<div class="modal-dialog loader_dialog">
 			<div class="modal-content">
-				<img src="./img/loader.gif" alt="">
+				<img src="./img/loader.gif" class="loader_modal" alt="">
 			</div>
 	   	</div>
+		<!-- LOADER END ******************************************* -->
 	   </div>
         <div class="modal" id="myModal">
             <div class="modal-dialog modal-dialog-scrollable">
@@ -79,7 +80,7 @@
                     <div class="modal-body" id="technician">
 					<script id="technician-template" type="text/template">
 						{{#names}}
-							<div class="row name">
+							<div class="row name-blue">
 								<div class="col-sm-12 ">
 									<h4>• {{name}}</h4>
 									<span class="techId" style="display: none">{{_id}}</span>
@@ -102,36 +103,37 @@
         </div>
 
     </div>
-	    <div class="data">
-		    <script type="text/template" id="result-template">
+	<div class="data">
+		<script type="text/template" id="result-template">
+			<div class="row" id="data-item">
+				<div class="col-sm-10 offset-sm-1 group_1">
+			{{#each res}}
+			<div class="row name">
+				<div class="col-sm-12 ">
+					<h4>{{name}}</h4>
+				</div>
+			</div>
+				{{#each this.datas}}
+							<div class="row sm_part">
+								<div class="col-sm-5 ">
+									<p>{{partId}}</p>
+									<p>{{status this}}</p>
+									<span>{{trackCode}}</span>
+								</div>
+								<div class="col-sm-7 complate blue" id="{{partId}}">
+									<p>{{expected this}}</p>
+									<p>{{expectedDate this}}</p>
+								</div>
+								{{config this}}
+							</div>
 
-		    <!-- <div class="row">
-			    <div class="col-1 offset-sm-1 esh">
-				    <a href="#"><img src="img/refresh.png" alt="" id="refresh"></a>
-			    </div>
-		    </div> -->
-
-		    <div class="row" id="data-item">
-			    <div class="col-sm-10 offset-sm-1 group_1">
-				    <div class="row name">
-					    <div class="col-sm-12 ">
-						    <h4>{{techName}}</h4>
-					    </div>
-				    </div>
-				    <div class="row sm_part">
-					    <div class="col-sm-5 ">
-						    <p>{{partId}}</p>
-						    <p>{{status}}</p>
-						    <span>{{trackCode}}</span>
-					    </div>
-					    <div class="col-sm-7 complate blue">
-						    <p>{{expected}}</p>
-						    <p>{{expectedDate}}</p>
-					    </div>
-				    </div>
-			    </div>
-		    </div>
-	    </script>
+				{{/each}}
+			{{/each}}
+		</div>
+	</div>
+		</script>
+		<!--
+		-->
 	</div>
 	<div class="row">
 		<div id="msg_alert" class="col-sm-10 offset-sm-1 addData-res  alert  error_danger" style="display: none">
@@ -148,8 +150,10 @@
 	<script src="./libs/moment.min.js" charset="utf-8"></script>
 	<script src="./libs/jquery.min.js" crossorigin="anonymous"></script>
 	<script src="./libs/popper.min.js"  crossorigin="anonymous"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.1.1/handlebars.min.js"></script>
+	<!-- <script src="./libs/mustache-min.js"></script> -->
+
 	<script src="./libs/bootstrap.min.js"  crossorigin="anonymous"></script>
 	<script src="./js/script.js" charset="utf-8"></script>
-	<script src="./libs/mustache-min.js" charset="utf-8"></script>
 </body>
 </html>
