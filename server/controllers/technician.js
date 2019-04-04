@@ -7,8 +7,12 @@ exports.addTechnician = async (req, res) => {
 	//Get errors from express-validator
 	const errors = validationResult(req);
 
-	try{
+	if(process.env.DEBUG =='true'){
+		console.log(`AT: /server/controllers/technician.js, line: 11 \nROUTE: /teachnician/add\nREQUEST BODY:`)
 		console.log(req.body);
+		console.log('==================================================================');
+	}
+	try{
 		if(!errors.isEmpty()) //throw error if exists any
 			throw errors.array()
 		//pick values from body to avoid from unwished data
@@ -20,7 +24,11 @@ exports.addTechnician = async (req, res) => {
 		const data = await Technician.find({});
 		res.send(data)
 	}catch(e){
-		console.log(e);
+		if(process.env.DEBUG == 'true'){
+			console.log('ERROR at /server/controllers/technician.js, line: 26');
+			console.log(e);
+			console.log('==================================================================');
+		}
 		if(e.code == 11000){
 			return res.status(400).send({type: 'mongo-error', msg: 'Technician already exists, choose other name'})
 		}else if(e[0].msg.type == 'tech-validation'){

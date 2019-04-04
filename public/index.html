@@ -5,6 +5,14 @@
     <title>Title</title>
     <link rel="stylesheet" href="../libs/bootstrap.min.css" crossorigin="anonymous">
     <link rel="stylesheet" href="css/style.css">
+
+
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
 </head>
 <body>
     <div class="container top_block">
@@ -103,6 +111,7 @@
         </div>
 
     </div>
+
 	<div class="data">
 		<script type="text/template" id="result-template">
 			<div class="row" id="data-item">
@@ -120,11 +129,11 @@
 									<p>{{status this}}</p>
 									<span>{{trackCode}}</span>
 								</div>
-								<div class="col-sm-7 complate blue" id="{{partId}}">
+								<div class="col-sm-7 complate blue" id="part{{@../index}}{{@index}}">
 									<p>{{expected this}}</p>
 									<p>{{expectedDate this}}</p>
 								</div>
-								{{config this}}
+								{{config this @../index @index}}
 							</div>
 
 				{{/each}}
@@ -143,6 +152,33 @@
 	</div>
 
 </div>
+
+<div class="text-center">
+	<!-- Button HTML (to Trigger Modal) -->
+	<a href="#myModal_conf" class="trigger-btn" data-toggle="modal">Click to Open Confirm Modal</a>
+</div>
+
+
+	<div id="myModal_conf" class="modal fade">
+   	<div class="modal-dialog modal-confirm">
+   		<div class="modal-content conf_content">
+   			<div class="modal-header conf_header">
+   				<div class="icon-box">
+   					<i class="material-icons">&#xE5CD;</i>
+   				</div>
+   				<h4 class="modal-title">Are you sure?</h4>
+                   <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+   			</div>
+   			<div class="modal-body conf_body">
+   				<p>Do you really want to delete these records? This process cannot be undone.</p>
+   			</div>
+   			<div class="modal-footer conf_footer">
+   				<button type="button" class="btn btn-info" data-dismiss="modal">Cancel</button>
+   				<button type="button" class="btn btn-danger">Delete</button>
+   			</div>
+   		</div>
+   	</div>
+   </div>
 
 
 

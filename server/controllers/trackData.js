@@ -7,7 +7,11 @@ const {TrackData} = require('../models/trackData'),
 exports.addTrack = async (req, res) => {
 	//Get errors from express-validator
 	const errors = validationResult(req);
-
+	if(process.env.DEBUG =='true'){
+		console.log(`FROM: /server/controllers/trackData.js, line:11 \nROUTE: /trackData/add\nREQUEST BODY:`)
+		console.log(req.body);
+		console.log('==================================================================');
+	}
 	try{
 		if(!errors.isEmpty()) //throw error if exists any
 			throw errors.array()
@@ -16,11 +20,14 @@ exports.addTrack = async (req, res) => {
 		//create new doc and save it
 		const track = new TrackData(body);
 		const tech = await Technician.findOneAndUpdate({_id: body.techName}, {$push:{datas: track._id}}, {new:true});
-		if(!tech) console.log('vd es');
 		await track.save();
 		res.send(track)
 	}catch(e){
-		console.log(e);
+		if(process.env.DEBUG =='true'){
+			console.log('ERROR at /server/controllers/trackData.js, line: 25');
+			console.log(e);
+			console.log('==================================================================');
+		}
 		if(e[0]){
 			return res.status(400).send({type: e[0].msg.type, msg: e[0].msg.msg})
 		}else if(e.errmsg && e.errmsg.includes('duplicate') && e.errmsg.includes('partId')){

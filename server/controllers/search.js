@@ -3,6 +3,11 @@ const {TrackData} = require('../models/trackData'),
 	convert = require('xml-js').xml2json;
 exports.search = async (req, res) => {
 	let body;
+	if(process.env.DEBUG =='true'){
+		console.log(`AT: /server/controllers/search.js, line: 7 \nROUTE: /search\nREQUEST BODY:`)
+		console.log(req.query);
+		console.log('==================================================================');
+	}
 	try{
 		//Find doc with given data, throw error if there's no doc
 		const data = await TrackData.findOne({partId: req.query.partId}).populate('techName')
@@ -32,10 +37,13 @@ exports.search = async (req, res) => {
 				expected: JSON.parse(fedEx).TrackPackagesResponse.packageList[0].estDeliveryDt
 			}
 		}
-		res.send([body])
+		res.send(body)
 	}catch(e){
-		console.log('error');
-		console.log(e);
+		if(process.env.DEBUG =='true'){
+			console.log('ERROR at /server/controllers/search.js, line: 41');
+			console.log(e);
+			console.log('==================================================================');
+		}
 		res.status(404).send(e)
 	}
 }
