@@ -1,3 +1,4 @@
+
 const _ = require('lodash'),
 	{validationResult } = require('express-validator/check');
 
@@ -24,7 +25,7 @@ exports.addTrack = async (req, res) => {
 		res.send(track)
 	}catch(e){
 		if(process.env.DEBUG =='true'){
-			console.log('ERROR at /server/controllers/trackData.js, line: 25');
+			console.log('ERROR at /server/controllers/trackData.js, line: 28');
 			console.log(e);
 			console.log('==================================================================');
 		}

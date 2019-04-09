@@ -19,7 +19,6 @@ app.use(function(req, res, next) {
   return res.status(404).render('404.hbs', {url: req.url});
 });
 
-
 app.listen(port, () => {
 	if(process.env.DEBUG == 'true'){
 		console.log(`FROM: /server/server.js, line:24 \nPORT: ${port}\nMESSAGE: Server Started Succesfully`)

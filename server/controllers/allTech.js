@@ -19,7 +19,7 @@ exports.getAll = async (req, res) => {
 		res.send(data)
 	}catch(e){
 		if(process.env.DEBUG =='true'){
-			console.log('ERROR at /server/controllers/allTech.js, line: 20');
+			console.log('ERROR at /server/controllers/allTech.js, line: 22');
 			console.log(e);
 			console.log('==================================================================');
 		}

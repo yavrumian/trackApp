@@ -11,24 +11,30 @@ function addProceed(e){
 }
 
 Handlebars.registerHelper("status", function(data) {
-	if(data.expected){
+	if(data.status == 'not-delivered'){
 		return moment(data.startDate).format('[Shaped on ]dddd L [at] LT')
+	}else if(data.status == 'pre'){
+		return 'Awaiting For Item'
 	}else{
 		return moment(data.lastDate).format('[Delivered on ]dddd L [at] LT')
 	}
 })
 
 Handlebars.registerHelper("expected", function(data) {
-	if(data.expected){
+	if(data.status == 'not-delivered'){
 		return 'Expected in ' + moment.duration(moment(data.expected).diff(moment())).humanize()
+	}else if(data.status == 'pre'){
+		return 'Awaiting!'
 	}else{
 		return 'Complete!'
 	}
 })
 
 Handlebars.registerHelper("expectedDate", function(data) {
-	if(data.expected){
+	if(data.status == 'not-delivered'){
 		return  moment(data.expected).format('L')
+	}else if(data.status == 'pre'){
+		return 'Unknown'
 	}else{
 		return moment(data.lastDate).format('L')
 	}
@@ -36,7 +42,7 @@ Handlebars.registerHelper("expectedDate", function(data) {
 
 Handlebars.registerHelper("config", function(data, arg1, arg2, options) {
 	$("head").append('<style type="text/css"></style>');
-	if(data.expected){
+	if(data.status == 'not-delivered'){
 		let color, percent = Math.round((moment.duration(moment().diff(moment(data.startDate))).asMinutes() / moment.duration(moment(data.expected).diff(moment(data.startDate))).asMinutes()) * 80) +10
 		if(percent >= 50) color = '#ff9b5d'
 		else color = '#ff485c'
@@ -47,6 +53,7 @@ Handlebars.registerHelper("config", function(data, arg1, arg2, options) {
 })
 
 function pageInit(res){
+	console.log(res);
 	pageReset()
 	$('.data').show()
 	template = $('#result-template').html();

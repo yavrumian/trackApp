@@ -25,7 +25,7 @@ exports.addTechnician = async (req, res) => {
 		res.send(data)
 	}catch(e){
 		if(process.env.DEBUG == 'true'){
-			console.log('ERROR at /server/controllers/technician.js, line: 26');
+			console.log('ERROR at /server/controllers/technician.js, line: 28');
 			console.log(e);
 			console.log('==================================================================');
 		}
