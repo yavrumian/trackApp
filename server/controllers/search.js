@@ -1,6 +1,8 @@
-const request = require('request-promise');
-const {TrackData} = require('../models/trackData'),
+const request = require('request-promise'),
+	cheerio = require('cheerio'),
 	convert = require('xml-js').xml2json;
+const {TrackData} = require('../models/trackData')
+
 exports.search = async (req, res) => {
 	let body;
 	if(process.env.DEBUG =='true'){
@@ -18,13 +20,28 @@ exports.search = async (req, res) => {
 			//Make request to USPS with given data and parse it
 			let usps = await request(urlUSPS);
 			let parsedXML = JSON.parse(convert(usps, {compact: true, spaces: 4})).TrackResponse.TrackInfo;
+			if(process.env.DEBUG =='true'){
+				console.log(`AT: /server/controllers/search.js, line: 19 \nROUTE: /search\nREQUEST TO:${urlUSPS}\nRESPONSE: `)
+				console.log('**Response\'s too long, uncomment line 26 to see it');
+				//console.log(parsedXML);
+				console.log('==================================================================');
+			}
+			//If is not delivered make request to get expected date
+			let expected;
+			if(!parsedXML.TrackSummary.Event._text.includes('Delivered')){
+				let html = await request(`https://tools.usps.com/go/TrackConfirmAction?tLabels=${data.trackCode}`)
+				let $ = cheerio.load(html)
+				let time = $('.time').text().trim().slice(0, -104).trim();
+				expected = `${$('.date').text().trim()} ${$('.month_year').text().trim().slice(0, -150).trim()} ${time.slice(0, -2)} ${time.slice(time.length - 2, time.length)}`
+			}
 			//Get first and last events of given trackCode, assign a object and send it to Client
 			let startEvent = parsedXML.TrackDetail.pop();
 			let lastEvent = parsedXML.TrackSummary.EventDate._text + " " +parsedXML.TrackSummary.EventTime._text;
 			body = {
 				...data._doc,
 				startDate: startEvent.EventDate._text + " " + startEvent.EventTime._text,
-				lastDate: lastEvent
+				lastDate: lastEvent,
+				expected
 			}
 		}
 		if(data.courier == 'fedEx'){
