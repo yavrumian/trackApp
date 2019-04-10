@@ -53,10 +53,10 @@ Handlebars.registerHelper("config", function(data, arg1, arg2, options) {
 })
 
 function pageInit(res){
-	console.log(res);
 	pageReset()
 	$('.data').show()
 	template = $('#result-template').html();
+	$('body').css('pointer-events', 'auto')
 	$('#loader').modal('hide')
 	//*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/
 	var html = Handlebars.compile(template)( {
@@ -102,17 +102,20 @@ function addTechSuccess(res, template){
 
 $(document).ready(function(){
 	$('input').val('')
+	$('body').css('pointer-events', 'none')
 	$('#loader').modal()
 	$.ajax({url: '/allTech',
 	method: 'get',
 	success: function(res){
 		pageInit(res)
+		$('body').css('pointer-events', 'auto')
 		$('#loader').modal('hide')
 		template = $('#technician-template').html()
 		addTechSuccess(res, template)
 	},
 	error: function(e){
 		pageReset()
+		$('body').css('pointer-events', 'auto')
 		$('#loader').modal('hide')
 		template = $('#technician-template').html()
 		var html = Handlebars.compile(template)({
@@ -133,6 +136,7 @@ $('.addTrack-form').submit(function(e){
 		$('#addTechErr').text('*Please choose technician')
 	}else{
 		$('#myModal').modal('hide')
+		$('body').css('pointer-events', 'none')
 		$('#loader').modal()
 		$.ajax({url: '/trackData/add',
 		method: 'post',
@@ -143,6 +147,7 @@ $('.addTrack-form').submit(function(e){
 		},
 		success: function(res){
 			pageReset('success')
+			$('body').css('pointer-events', 'auto')
 			$('#loader').modal('hide')
 			$('#addData-msg').text(`Part ID: ${res.partId}\nTracking Code: ${res.trackCode}`)
 			$('#addData-header').text('Track Data was added successfuly ')
@@ -150,6 +155,7 @@ $('.addTrack-form').submit(function(e){
 		},
 		error: function(err){
 			pageReset('error')
+			$('body').css('pointer-events', 'auto')
 			$('#loader').modal('hide')
 			$('#addData-header').text('There was an error, please fix and TRY AGAIN')
 			$('#addData-msg').text(err.responseJSON.msg)
@@ -172,6 +178,7 @@ $('.addTech').submit(function(e){
 	if(techName.length < 3){
 		$('#addTechErr').text('*Technician name must contain at least 3 characters')
 	}	else{
+		$('body').css('pointer-events', 'none')
 		$('#loader').modal()
 		$('#addTechErr').text('')
 		$.ajax({url: '/technician/add',
@@ -181,14 +188,14 @@ $('.addTech').submit(function(e){
 		},
 		success: function(res){
 			pageReset()
+			$('body').css('pointer-events', 'auto')
 			$('#loader').modal('hide')
 			addTechSuccess(res, template)
 		},
 		error: function(err){
 			pageReset('error')
-			//ERROR CASE ********************************************
+			$('body').css('pointer-events', 'auto')
 			$('#loader').modal('hide')
-			// $( "#msg_alert" ).addClass( "alert-danger" );
 			$('#addData-header').text('There was an error, please fix and TRY AGAIN')
 			$('#addData-msg').text(err.responseJSON.msg)
 			$('.addData-res').show()
@@ -218,6 +225,7 @@ $('.search_form').submit(function(e){
 		location.reload()
 	}else{
 		$('.search-err-msg').text('')
+		$('body').css('pointer-events', 'none')
 		$('#loader').modal()
 		$.ajax({url: '/search?partId=' + $('.search').val(),
 		method: 'get',
@@ -229,9 +237,8 @@ $('.search_form').submit(function(e){
 		},
 		error: function(err){
 			pageReset('error')
-			//ERROR CASE ********************************************
+			$('body').css('pointer-events', 'auto')
 			$('#loader').modal('hide')
-			// $( "#msg_alert" ).addClass( "alert-danger" );
 			$('#addData-header').text('There was an error, please fix and TRY AGAIN')
 			$('#addData-msg').text(err.responseJSON.msg)
 			$('.addData-res').show()
@@ -239,3 +246,19 @@ $('.search_form').submit(function(e){
 		})
 	}
 })
+var lastTech = "";
+function lastTechName(techName){
+    lastTech = techName;
+}
+
+function deleteTech(){
+	$.ajax({url: '/technician/delete/' + lastTech,
+		method: 'get',
+		success: function(res){
+			location.reload()
+		},
+		error: function(err){
+			location.reload()
+		}
+	})
+}

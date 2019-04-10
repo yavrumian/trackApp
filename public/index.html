@@ -102,7 +102,7 @@
 					</div>
 
                     <!-- Modal footer -->
-                    <div class="modal-footer">
+                    <div class="modal-footer-tech">
                         <button type="button" class="continue">Continue</button>
                     </div>
 
@@ -118,8 +118,9 @@
 				<div class="col-sm-10 offset-sm-1 group_1">
 			{{#each res}}
 			<div class="row name">
-				<div class="col-sm-12 ">
-					<h4>{{name}}</h4>
+				<div class="row col-sm-12">
+                    <div class="left techNameDiv"><h4>{{name}}</h4></div>
+                    <div class="right techDeleteDiv"><a href="#myModal_conf" onclick="lastTechName('{{_id}}')" data-toggle="modal"><span style="color: red;">Delete technician</span></a></div>
 				</div>
 			</div>
 				{{#each this.datas}}
@@ -155,7 +156,7 @@
 
 <div class="text-center">
 	<!-- Button HTML (to Trigger Modal) -->
-	<a href="#myModal_conf" class="trigger-btn" data-toggle="modal">Click to Open Confirm Modal</a>
+
 </div>
 
 
@@ -163,9 +164,6 @@
    	<div class="modal-dialog modal-confirm">
    		<div class="modal-content conf_content">
    			<div class="modal-header conf_header">
-   				<div class="icon-box">
-   					<i class="material-icons">&#xE5CD;</i>
-   				</div>
    				<h4 class="modal-title">Are you sure?</h4>
                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
    			</div>
@@ -174,7 +172,7 @@
    			</div>
    			<div class="modal-footer conf_footer">
    				<button type="button" class="btn btn-info" data-dismiss="modal">Cancel</button>
-   				<button type="button" class="btn btn-danger">Delete</button>
+   				<button type="button" class="btn btn-danger" data-dismiss="modal" onclick="deleteTech()">Delete</button>
    			</div>
    		</div>
    	</div>
