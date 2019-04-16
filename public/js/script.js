@@ -1,5 +1,21 @@
+function correctSizes()
+{
+	var containerWidth = $("#itemsContainer").width();
+	var coloredPartWidth = $(".orange").width();
+	var all = document.getElementsByClassName('orange');
+	for (var i = 0; i < all.length; i++) {
+		all[i].style.left = (containerWidth-coloredPartWidth) + "px";
+	}
+}
+
+document.getElementsByTagName("BODY")[0].onresize = function() {
+	correctSizes();
+};
+
+$(function() {correctSizes();});
+
 let techId;
-let template
+let template;
 function addProceed(e){
 	e.preventDefault();
 	if($('#trackCode').val().length < 3 || $('#partId').val().length < 3)
@@ -64,6 +80,7 @@ function pageInit(res){
 	});
 	$('#data-item').remove()
 	$('.data').prepend(html)
+	correctSizes();
 }
 
 function pageReset(res){

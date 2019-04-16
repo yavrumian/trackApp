@@ -14,17 +14,17 @@
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
 </head>
-<body>
+<body id="colors">
     <div class="container top_block">
         <div class="row">
             <div class="col-sm-10 offset-sm-1">
                 <div class="row">
-                    <div class="col-sm-7">
+                    <div class="col-sm">
                         <form class="form_block addTrack-form">
                             <div class="row">
                                 <div class="col left">
-                                    <button type="button" class="btn arrow-down openModal" >
-                                        <img src="img/arrow-down.png" alt="">
+                                    <button type="button" class="btn arrow-down openModal"  id="popup_button">
+                                        <img src="img/arrow-down.png" alt="" id="search_left">
                                     </button>
                                     <input type="text" class="form-control addForm" id="partId" placeholder="Enter Part ID">
                                 </div>
@@ -41,7 +41,7 @@
                             <div class="row">
                                 <div class="col">
                                     <button class="btn magnif" data-toggle="modal" type="submit">
-                                        <img src="img/magnif.png" alt="">
+                                        <img src="img/magnif.png" alt="" id="search_img">
                                     </button>
                                     <input type="text" class="form-control search" placeholder="Enter part's ID for search">
                                 </div>
@@ -100,7 +100,7 @@
 					<div class="items">
 
 					</div>
-
+					</div>
                     <!-- Modal footer -->
                     <div class="modal-footer-tech">
                         <button type="button" class="continue">Continue</button>
@@ -115,7 +115,7 @@
 	<div class="data">
 		<script type="text/template" id="result-template">
 			<div class="row" id="data-item">
-				<div class="col-sm-10 offset-sm-1 group_1">
+				<div class="col-sm-10 offset-sm-1 group_1" id="itemsContainer">
 			{{#each res}}
 			<div class="row name">
 				<div class="row col-sm-12">
@@ -124,16 +124,19 @@
 				</div>
 			</div>
 				{{#each this.datas}}
-							<div class="row sm_part">
-								<div class="col-sm-5 ">
+
+							<div class="row sm_part" >
+								<div class="col-sm-7" >
 									<p>{{partId}}</p>
 									<p>{{status this}}</p>
 									<span>{{trackCode}}</span>
 								</div>
-								<div class="col-sm-7 complate blue" id="part{{@../index}}{{@index}}">
+
+								<div class="col-sm-6 complate blue orange" id="part{{@../index}}{{@index}}">
 									<p>{{expected this}}</p>
 									<p>{{expectedDate this}}</p>
 								</div>
+
 								{{config this @../index @index}}
 							</div>
 
@@ -141,6 +144,7 @@
 			{{/each}}
 		</div>
 	</div>
+
 		</script>
 		<!--
 		-->
@@ -152,7 +156,6 @@
 	     </div>
 	</div>
 
-</div>
 
 <div class="text-center">
 	<!-- Button HTML (to Trigger Modal) -->
