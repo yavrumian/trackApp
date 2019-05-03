@@ -19,6 +19,10 @@ exports.addTechnician = async (req, res) => {
 		//pick values from body to avoid from unwished data
 		const body = _.pick(req.body, 'name');
 
+		//check if there's data with given name and throw error if exists
+		const doc = await TrackData.find({partId: body.name})
+		console.log(doc[0]);
+		if(doc[0]) throw {code: 11000, msg:'There\'s a doc with this name' }
 		//create new doc and save it
 		await new Technician(body).save();
 		//get All Technicians and send to client
@@ -31,7 +35,7 @@ exports.addTechnician = async (req, res) => {
 			console.log('==================================================================');
 		}
 		if(e.code == 11000){
-			return res.status(400).send({type: 'mongo-error', msg: 'Technician already exists, choose other name'})
+			return res.status(400).send({type: 'mongo-error', msg: 'Name is used as partId or technician name, pick another'})
 		}else if(e[0].msg.type == 'tech-validation'){
 			return res.status(400).send({type: 'validation-error', msg: 'Technician name must contain at least 3 characters'})
 		}

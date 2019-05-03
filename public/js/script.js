@@ -244,13 +244,18 @@ $('.search_form').submit(function(e){
 		$('.search-err-msg').text('')
 		$('body').css('pointer-events', 'none')
 		$('#loader').modal()
-		$.ajax({url: '/search?partId=' + $('.search').val(),
+		$.ajax({url: '/search?techIncluded=true&partId=' + $('.search').val(),
 		method: 'get',
 		success: function(res){
-			pageInit([{
-				name: res.techName.name,
-				datas: [res]
-			}])
+			if(res[0].isTech){
+				pageInit(res)
+			}else{
+				pageInit([{
+					name: res[0].techName.name,
+					datas: res
+				}])
+			}
+
 		},
 		error: function(err){
 			pageReset('error')

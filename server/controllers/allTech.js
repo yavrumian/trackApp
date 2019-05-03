@@ -13,6 +13,7 @@ exports.getAll = async (req, res) => {
 			for (let x = 0; x < data[i].datas.length; x++) {
 				let itemData = await request(`${req.protocol}://${req.hostname}:${process.env.PORT}/search?partId=${data[i].datas[x].partId}`)
 				itemData = JSON.parse(itemData)
+				itemData = itemData[0]
 				data[i].datas[x] = itemData
 			}
 		}
