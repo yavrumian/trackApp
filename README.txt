@@ -6,3 +6,8 @@ USPS_ID = <ID of USPS account>
 MONGODB_URI = <URI to mongodb server>
 DEBUG = <true/false>
 EXP_TIME = <Expiration time in days>
+
+
+
+
+login: taynikexchange, pass: Amilly179$

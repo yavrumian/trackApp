@@ -9,7 +9,7 @@ exports.search = async (req, res) => {
 	let startDate, expected, lastDate, status = 'delivered';
 	let isTech = req.query.techIncluded;
 	if(process.env.DEBUG =='true'){
-		console.log(`AT: /server/controllers/search.js, line: 7 \nROUTE: /search\nREQUEST BODY:`)
+		console.log(`AT: /server/controllers/search.js, line: 12 \nROUTE: /search\nREQUEST BODY:`)
 		console.log(req.query);
 		console.log('==================================================================');
 	}
@@ -42,8 +42,8 @@ exports.search = async (req, res) => {
 					let usps = await request(urlUSPS);
 					let parsedXML = JSON.parse(convert(usps, {compact: true, spaces: 4})).TrackResponse.TrackInfo;
 					if(process.env.DEBUG =='true'){
-						console.log(`AT: /server/controllers/search.js, line: 31 \nROUTE: /search\nREQUEST TO:${urlUSPS}\nRESPONSE: `)
-						console.log('**Response\'s too long, uncomment line 33 to see it');
+						console.log(`AT: /server/controllers/search.js, line: 45 \nROUTE: /search\nREQUEST TO:${urlUSPS}\nRESPONSE: `)
+						console.log('**Response\'s too long, uncomment line 47 to see it');
 						//console.log(parsedXML);
 						console.log('==================================================================');
 					}
@@ -78,16 +78,16 @@ exports.search = async (req, res) => {
 				}
 				if(data.courier == 'fedEx'){
 					const urlFedEx = `https://www.fedex.com/trackingCal/track?data={%22TrackPackagesRequest%22:{%22trackingInfoList%22:[{%22trackNumberInfo%22:{%22trackingNumber%22:%22${data.trackCode}%22}}]}}&action=trackpackages`
-					if(process.env.DEBUG =='true'){
-						console.log(`AT: /server/controllers/search.js, line: 67 \nROUTE: /search\nREQUEST TO:${urlFedEx}\nRESPONSE: `)
-						console.log('**Response\'s too long, uncomment line 69 to see it');
-						//console.log(parsedXML);
-						console.log('==================================================================');
-					}
 					//make request to FedEx and parse it
 					let fedEx = await request(urlFedEx)
 					fedEx = JSON.parse(fedEx);
-					let status = 'delivered'
+					if(process.env.DEBUG =='true'){
+						console.log(`AT: /server/controllers/search.js, line: 85 \nROUTE: /search\nREQUEST TO:${urlFedEx}\nRESPONSE: `)
+						console.log('**Response\'s too long, uncomment line 87 to see it');
+						//console.log(fedEx);
+						console.log('==================================================================');
+					}
+					status = 'delivered'
 					startDate = fedEx.TrackPackagesResponse.packageList[0].shipDt;
 					lastDate = fedEx.TrackPackagesResponse.packageList[0].scanEventList[0].date + " " + fedEx.TrackPackagesResponse.packageList[0].scanEventList[0].time;
 					expected = fedEx.TrackPackagesResponse.packageList[0].estDeliveryDt
@@ -102,6 +102,42 @@ exports.search = async (req, res) => {
 						await data.save()
 					}
 				}
+				if(data.courier == 'DHL'){
+
+					//Set options and make DHL request
+					const dhlOpt =  {
+						uri: 'https://api-eu.dhl.com/track/shipments?',
+						qs: {
+							trackingNumber: data.trackCode
+						},
+						headers: {
+							 'DHL-API-Key': process.env.DHL_KEY
+						},
+						json: true
+					}
+					let dhl = await request(dhlOpt)
+					dhl = dhl.shipments[0]
+					if(process.env.DEBUG =='true'){
+						console.log(`AT: /server/controllers/search.js, line: 121 \nROUTE: /search\nREQUEST TO:${dhlOpt.uri}\nRESPONSE: `)
+						console.log('**Response\'s too long, uncomment line 123 to see it');
+						//console.log(dhl);
+						console.log('==================================================================');
+					}
+					//Parse response
+					startDate = dhl.events.reverse()[1].timestamp
+					lastDate = dhl.events.reverse()[0].timestamp
+
+					//set status
+					if(dhl.status.status != 'delivered'){
+						status = 'not-delivered'
+					}else if(dhl.status.status == 'delivered'){
+						data.startDate = startDate;
+						data.lastDate = lastDate;
+						data.delivered = new Date()
+						await data.save()
+					}
+
+				}
 			}
 			body = [{
 				...data._doc,
@@ -115,7 +151,7 @@ exports.search = async (req, res) => {
 		res.send(body)
 	}catch(e){
 		if(process.env.DEBUG =='true'){
-			console.log('ERROR at /server/controllers/search.js, line: 100');
+			console.log('ERROR at /server/controllers/search.js, line: 154');
 			console.log(e);
 			console.log('==================================================================');
 		}

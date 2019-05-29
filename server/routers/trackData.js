@@ -34,13 +34,31 @@ router.post('/add',[
 			const urlFedEx = `https://www.fedex.com/trackingCal/track?data={%22TrackPackagesRequest%22:{%22trackingInfoList%22:[{%22trackNumberInfo%22:{%22trackingNumber%22:%22${value}%22}}]}}&action=trackpackages`
 			const usps = await request(urlUSPS);
 			const fedEx = await request(urlFedEx);
-
+			let dhl;
+			const dhlOpt = {
+				uri: 'https://api-eu.dhl.com/track/shipments?',
+				qs: {
+					trackingNumber: value
+				},
+				headers: {
+					 'DHL-API-Key': process.env.DHL_KEY
+				},
+				json: true
+			}
+			try{
+				dhl = await request(dhlOpt)
+			}catch(e){
+				dhl = e
+			}
 			if(!JSON.parse(convert(usps, {compact: true, spaces: 4})).Error && !JSON.parse(convert(usps, {compact: true, spaces: 4})).TrackResponse.TrackInfo.Error){
 				statusCode = 0;
 				req.body.courier = 'USPS'
 			}else if(JSON.parse(fedEx).TrackPackagesResponse.packageList[0].trackingQualifier){
 				statusCode = 0;
 				req.body.courier = 'fedEx'
+			}else if (!dhl.error) {
+				statusCode = 0;
+				req.body.courier = 'DHL'
 			}else{
 				statusCode = -1
 			}
