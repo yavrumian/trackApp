@@ -11,7 +11,7 @@ exports.getAll = async (req, res) => {
 		let data = await Technician.find({}).populate('datas');
 		for (let i = 0; i < data.length; i++) {
 			for (let x = 0; x < data[i].datas.length; x++) {
-				let itemData = await request(`${req.protocol}://${req.hostname}:${process.env.PORT}/search?partId=${data[i].datas[x].partId}`)
+				let itemData = await request(`${process.env.HOST}/search?partId=${data[i].datas[x].partId}`)
 				itemData = JSON.parse(itemData)
 				itemData = itemData[0]
 				data[i].datas[x] = itemData

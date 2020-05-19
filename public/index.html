@@ -3,13 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
-    <link rel="stylesheet" href="../libs/bootstrap.min.css" crossorigin="anonymous">
+    <link rel="stylesheet" href="./libs/bootstrap.min.css" crossorigin="anonymous">
     <link rel="stylesheet" href="css/style.css">
 
 
 
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<script src="https://cdn.jsdelivr.net/npm/handlebars@latest/dist/handlebars.runtime.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
@@ -86,16 +87,8 @@
 
                     <!-- Modal body -->
                     <div class="modal-body" id="technician">
-					<script id="technician-template" type="text/template">
-						{{#names}}
-							<div class="row name-blue">
-								<div class="col-sm-12 ">
-									<h4>• {{name}}</h4>
-									<span class="techId" style="display: none">{{_id}}</span>
-								</div>
-							</div>
-						{{/names}}
-						<span>{{msg}}</span>
+					<script id="technician-template" src="./js/templates/technician.precompiled.js" >
+
 					</script>
 					<div class="items">
 
@@ -113,39 +106,7 @@
     </div>
 
 	<div class="data">
-		<script type="text/template" id="result-template">
-			<div class="row" id="data-item">
-				<div class="col-sm-10 offset-sm-1 group_1" id="itemsContainer">
-			{{#each res}}
-			<div class="row name">
-				<div class="row col-sm-12">
-                    <div class="left techNameDiv"><h4>{{name}}</h4></div>
-                    <div class="right techDeleteDiv"><a href="#myModal_conf" onclick="lastTechName('{{_id}}')" data-toggle="modal"><span style="color: red;">Delete technician</span></a></div>
-				</div>
-			</div>
-				{{#each this.datas}}
-
-							<div class="row sm_part" >
-								<div class="col-sm-7" >
-									<p>{{partId}}</p>
-									<p>{{status this}}</p>
-									<span>{{trackCode}}</span>
-								</div>
-
-								<div class="col-sm-6 complate blue orange" id="part{{@../index}}{{@index}}">
-									<p>{{expected this}}</p>
-									<p>{{expectedDate this}}</p>
-								</div>
-
-								{{config this @../index @index}}
-							</div>
-
-				{{/each}}
-			{{/each}}
-		</div>
-	</div>
-
-		</script>
+		<script src="./js/templates/result.precompiled.js" id="result-template">		</script>
 		<!--
 		-->
 	</div>
@@ -187,7 +148,7 @@
 	<script src="./libs/moment.min.js" charset="utf-8"></script>
 	<script src="./libs/jquery.min.js" crossorigin="anonymous"></script>
 	<script src="./libs/popper.min.js"  crossorigin="anonymous"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.1.1/handlebars.min.js"></script>
+	<!-- <script src="./libs/handlebars.js"></script> -->
 	<!-- <script src="./libs/mustache-min.js"></script> -->
 
 	<script src="./libs/bootstrap.min.js"  crossorigin="anonymous"></script>

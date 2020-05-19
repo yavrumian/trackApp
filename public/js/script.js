@@ -1,3 +1,5 @@
+const prefix = "track"
+
 function correctSizes()
 {
 	var containerWidth = $("#itemsContainer").width();
@@ -75,7 +77,7 @@ function pageInit(res){
 	$('body').css('pointer-events', 'auto')
 	$('#loader').modal('hide')
 	//*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/
-	var html = Handlebars.compile(template)( {
+	var html = Handlebars.templates.result( {
 			res:res
 	});
 	$('#data-item').remove()
@@ -100,11 +102,11 @@ function pageReset(res){
 
 function addTechSuccess(res, template){
 		if(!res[0]){
-			var html = Handlebars.compile(template)({
+			var html = template({
 				msg: 'There\'s no Technicians, Add to proceed'
 			});
 		}else {
-			var html = Handlebars.compile(template)({
+			var html = template({
 				names: res
 			});
 		}
@@ -121,13 +123,13 @@ $(document).ready(function(){
 	$('input').val('')
 	$('body').css('pointer-events', 'none')
 	$('#loader').modal()
-	$.ajax({url: '/allTech',
+	$.ajax({url: `/${prefix}/allTech`,
 	method: 'get',
 	success: function(res){
 		pageInit(res)
 		$('body').css('pointer-events', 'auto')
 		$('#loader').modal('hide')
-		template = $('#technician-template').html()
+		template = Handlebars.templates.technician
 		addTechSuccess(res, template)
 	},
 	error: function(e){
@@ -135,7 +137,7 @@ $(document).ready(function(){
 		$('body').css('pointer-events', 'auto')
 		$('#loader').modal('hide')
 		template = $('#technician-template').html()
-		var html = Handlebars.compile(template)({
+		var html = Handlebars.templates.technician({
 			msg: 'There was an error. Please check you connection',
 		});
 		$('#technician').prepend(html)
@@ -155,7 +157,7 @@ $('.addTrack-form').submit(function(e){
 		$('#myModal').modal('hide')
 		$('body').css('pointer-events', 'none')
 		$('#loader').modal()
-		$.ajax({url: '/trackData/add',
+		$.ajax({url: `/${prefix}/trackData/add`,
 		method: 'post',
 		data: {
 			partId: $('#partId').val(),
@@ -189,7 +191,7 @@ $('.addTechBtn').click(function(e){
 })
 
 $('.addTech').submit(function(e){
-	template = $('#technician-template').html();
+	template = Handlebars.templates.technician
 	e.preventDefault()
 	let techName = $('.techName').val()
 	if(techName.length < 3){
@@ -198,7 +200,7 @@ $('.addTech').submit(function(e){
 		$('body').css('pointer-events', 'none')
 		$('#loader').modal()
 		$('#addTechErr').text('')
-		$.ajax({url: '/technician/add',
+		$.ajax({url: `/${prefix}/technician/add`,
 		method: 'post',
 		data: {
 			name: techName
@@ -244,7 +246,7 @@ $('.search_form').submit(function(e){
 		$('.search-err-msg').text('')
 		$('body').css('pointer-events', 'none')
 		$('#loader').modal()
-		$.ajax({url: '/search?techIncluded=true&partId=' + $('.search').val(),
+		$.ajax({url: `/${prefix}/search?techIncluded=true&partId=` + $('.search').val(),
 		method: 'get',
 		success: function(res){
 			if(res[0].isTech){
@@ -274,7 +276,7 @@ function lastTechName(techName){
 }
 
 function deleteTech(){
-	$.ajax({url: '/technician/delete/' + lastTech,
+	$.ajax({url: `/${prefix}/technician/delete/` + lastTech,
 		method: 'get',
 		success: function(res){
 			location.reload()

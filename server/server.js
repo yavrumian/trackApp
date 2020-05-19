@@ -1,4 +1,5 @@
 const {mongoose} = require('./db/mongoose'),
+	{ expressCspHeader, SELF } = require('express-csp-header'),
 	express = require('express'),
 	bodyParser = require('body-parser'),
 	path = require('path');
@@ -19,15 +20,24 @@ let options = {
 const app = express(),
 	port = process.env.PORT;
 
+
+// app.use(expressCspHeader({
+//     directives: {
+//         'unsafe-eval': [SELF],
+// 		'script-src': [SELF],
+// 		'default-src': ['*']
+//     }
+// }));
+
 app.set('view engine', 'hbs');
-app.use(express.static(path.join(__dirname, '../public')))
+app.use(`/${process.env.PREFIX}`, express.static(path.join(__dirname, '../public')))
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json())
-app.use('/technician', require('./routers/technician'));
-app.use('/trackData', require('./routers/trackData'));
+app.use(`/${process.env.PREFIX}/technician`, require('./routers/technician'));
+app.use(`/${process.env.PREFIX}/trackData`, require('./routers/trackData'));
 
-app.get('/search', require('./controllers/search').search)
-app.get('/allTech', require('./controllers/allTech').getAll)
+app.get(`/${process.env.PREFIX}/search`, require('./controllers/search').search)
+app.get(`/${process.env.PREFIX}/allTech`, require('./controllers/allTech').getAll)
 
 
 app.get('/test', async (req, res) =>{
@@ -49,6 +59,7 @@ app.use(function(req, res, next) {
 });
 
 app.listen(port, () => {
+	console.log(`Running on ${port}`);
 	if(process.env.DEBUG == 'true'){
 		console.log(`FROM: /server/server.js, line:24 \nPORT: ${port}\nMESSAGE: Server Started Succesfully`)
 		console.log('==================================================================');
